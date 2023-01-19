@@ -16,7 +16,7 @@ def run():
         print(response.status)
         if response.status == "acesso concedido":
             token = response.token
-            response = stub.SayTemperature(iot_service_pb2.TemperatureRequest(sensorName='temperature-1'))
+            response = stub.SayTemperature(iot_service_pb2.TemperatureRequest(sensorName='temperature-1', accessToken=token))
             print(response.status)
             print("Temperature received: " + response.temperature)
 

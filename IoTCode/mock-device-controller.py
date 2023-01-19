@@ -28,6 +28,7 @@ producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
 
 while True:
     (temp_c, temp_f) = read_temp()
+    print(temp_c, temp_f)
     producer.send('temperature', key='temperature-1'.encode(), value=str(temp_c).encode())
     producer.send('temperature', key='temperature-2'.encode(), value=str(temp_c + 2).encode())
     time.sleep(1)
