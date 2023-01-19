@@ -1,6 +1,7 @@
 import threading
 from concurrent import futures
 import logging
+import pickle
 
 from const import *
 from kafka import KafkaConsumer, KafkaProducer
@@ -9,19 +10,18 @@ import iot_service_pb2
 import iot_service_pb2_grpc
 
 # Twin state
-current_temperature = 'void'
+current_temperatures = {"temperature-1": "void", "temperature-2": "void"}
 led_state = {'red': 0, 'green': 0}
 
+
 # Kafka consumer to run on a separate thread
-
-
 def consume_temperature():
-    global current_temperature
-    consumer = KafkaConsumer(bootstrap_servers=KAFKA_SERVER+':'+KAFKA_PORT)
+    global current_temperatures
+    consumer = KafkaConsumer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
     consumer.subscribe(topics=('temperature'))
     for msg in consumer:
-        print(msg.value.decode())
-        current_temperature = msg.value.decode()
+        current_temperatures[msg.key.decode()] = msg.value.decode()
+        print(current_temperatures)
 
 
 def produce_led_command(state, ledname):
@@ -51,14 +51,14 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
                 accessGranted = True
 
         if accessGranted:
-            token = self.accessToken[login][0]
+            token = self.accessToken[login]
             return iot_service_pb2.Token(status="acesso concedido", token=token)
         else:
             return iot_service_pb2.Token(status="acesso negado", token="")
 
     def SayTemperature(self, request, context):
-        if request.accessToken == self.accessToken:
-            return iot_service_pb2.TemperatureReply(status="Ok", temperature=current_temperature)
+        if request.accessToken in self.authorizations:
+            return iot_service_pb2.TemperatureReply(status="Ok", temperature=current_temperatures[request.sensorName])
         else:
             return iot_service_pb2.TemperatureReply(status="Erro de acesso", temperature="")
 

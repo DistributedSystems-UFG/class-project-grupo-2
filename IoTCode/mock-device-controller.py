@@ -25,10 +25,9 @@ consumerThread = threading.Thread(target=consume_led_command)
 consumerThread.start()
 
 producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
-last_reported = 0
 
 while True:
     (temp_c, temp_f) = read_temp()
-    print(temp_c, temp_f)
-    producer.send('temperature', str(temp_c).encode())
+    producer.send('temperature', key='temperature-1'.encode(), value=str(temp_c).encode())
+    producer.send('temperature', key='temperature-2'.encode(), value=str(temp_c + 2).encode())
     time.sleep(1)
