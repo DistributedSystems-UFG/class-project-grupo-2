@@ -11,6 +11,7 @@ import iot_service_pb2_grpc
 
 # Twin state
 current_temperatures = {"temperature-1": "void", "temperature-2": "void"}
+current_luminosities = {"luminosity-1": "void", "luminosity-2": "void"}
 led_state = {'red': 0, 'green': 0}
 
 
@@ -24,8 +25,18 @@ def consume_temperature():
         print(current_temperatures)
 
 
+# Kafka consumer to run on a separate thread
+def consume_luminosity():
+    global current_luminosities
+    consumer = KafkaConsumer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
+    consumer.subscribe(topics=('luminosity'))
+    for msg in consumer:
+        current_luminosities[msg.key.decode()] = msg.value.decode()
+        print(current_luminosities)
+
+
 def produce_led_command(state, ledname):
-    producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER+':'+KAFKA_PORT)
+    producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
     producer.send('ledcommand', key=ledname.encode(),
                   value=str(state).encode())
     return state
@@ -38,8 +49,8 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
         "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
     }
     authorizations = {
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-1", "temperature-1"],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-1", "led-2", "luminosity-1"]
+        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-red", "temperature-1"],
+        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-red", "led-green", "luminosity-1"]
     }
 
     def GetAccessToken(self, request, context):
@@ -63,15 +74,28 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             else:
                 return iot_service_pb2.TemperatureReply(status="Erro de autorização", temperature="")
         else:
-            return iot_service_pb2.TemperatureReply(status="Erro de identificacao", temperature="")
+            return iot_service_pb2.TemperatureReply(status="Erro de identificação", temperature="")
 
     def BlinkLed(self, request, context):
-        print("Blink led ", request.ledname)
-        print("...with state ", request.state)
-        produce_led_command(request.state, request.ledname)
-        # Update led state of twin
-        led_state[request.ledname] = request.state
-        return iot_service_pb2.LedReply(ledstate=led_state)
+        if request.accessToken in self.authorizations:
+            if request.sensorName in self.authorizations[request.accessToken]:
+                ledName = request.sensorName.split('-')[1]
+                produce_led_command(request.state, ledName)
+                led_state[ledName] = request.state
+                return iot_service_pb2.LedReply(status="Ok", ledstate=led_state)
+            else:
+                return iot_service_pb2.LedReply(status="Erro de autorização", ledstate={})
+        else:
+            return iot_service_pb2.LedReply(status="Erro de identificação", ledstate={})
+    
+    def SayLuminosity(self, request, context):
+        if request.accessToken in self.authorizations:
+            if request.sensorName in self.authorizations[request.accessToken]:
+                return iot_service_pb2.LuminosityReply(status="Ok", luminosity=current_luminosities[request.sensorName])
+            else:
+                return iot_service_pb2.LuminosityReply(status="Erro de autorização", luminosity="")
+        else:
+            return iot_service_pb2.LuminosityReply(status="Erro de identificação", luminosity="")
 
 
 def serve():
@@ -84,8 +108,13 @@ def serve():
 
 if __name__ == '__main__':
     logging.basicConfig()
-    trd = threading.Thread(target=consume_temperature)
-    trd.start()
+
+    temperatureTrd = threading.Thread(target=consume_temperature)
+    temperatureTrd.start()
+
+    luminosityTrd = threading.Thread(target=consume_luminosity)
+    luminosityTrd.start()
+
     # Initialize the state of the leds on the actual device
     for color in led_state.keys():
         produce_led_command(led_state[color], color)
