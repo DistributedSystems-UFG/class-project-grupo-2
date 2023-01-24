@@ -38,7 +38,7 @@ def read_temp():
         return temp_c, temp_f
 
 def consume_led_command():
-    consumer = KafkaConsumer(bootstrap_servers=KAFKA_SERVER+':'+KAFKA_PORT)
+    consumer = KafkaConsumer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
     consumer.subscribe(topics=('ledcommand'))
     ledpin = 0
     for msg in consumer:
@@ -63,5 +63,5 @@ while True:
     print(temp_c, temp_f)
     if (math.fabs(temp_c - last_reported) >= 0.1):
         last_reported = temp_c
-        producer.send('temperature', str(temp_c).encode())
+        producer.send('temperature', key='temperature-1'.encode(), value=str(temp_c).encode())
     time.sleep(1)
