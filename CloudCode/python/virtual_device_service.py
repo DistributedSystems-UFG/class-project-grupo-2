@@ -56,6 +56,7 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
     def GetAccessToken(self, request, context):
         login = request.login
         password = request.password
+        print(login, password)
         accessGranted = False
         if login in self.usersDB:
             if self.usersDB[login] == password:
