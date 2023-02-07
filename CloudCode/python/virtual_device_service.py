@@ -82,7 +82,7 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             if request.sensorName in self.authorizations[request.accessToken]:
                 ledName = request.sensorName.split('-')[1]
                 produce_led_command(request.state, ledName)
-                led_state[ledName] = request.state
+                led_state[request.sensorName] = request.state
                 return iot_service_pb2.LedReply(status="Ok", ledstate=led_state)
             else:
                 return iot_service_pb2.LedReply(status="Erro de autorização", ledstate={})
