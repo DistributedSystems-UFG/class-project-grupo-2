@@ -1,5 +1,6 @@
 import threading
 from concurrent import futures
+from random import shuffle
 import logging
 import pickle
 import uuid
@@ -10,22 +11,27 @@ import grpc
 import iot_service_pb2
 import iot_service_pb2_grpc
 
-# A in-memory DB of authorizations
-authorizations = {}
+# A in-memory DB of user
+usersDB = {}
 
-class User:
-    def __init__(self, login, password, auths):
-        self.login = login
-        self.password = password
-        self.token = self.build_token()
-        authorizations[self.token] = auths
-    
-    def build_token(self):
-        return str(uuid.uuid4())
+# A in-memory DB of access tokens
+accessTokenDB = {}
+
+# A in-memory DB of authorizations
+authorizationsDB = {}
+
+def new_token():
+    return str(uuid.uuid4())
+
+def new_user(login, password, auths):
+    token = new_token()
+    usersDB[login] = password
+    accessTokenDB[login] = token
+    authorizationsDB[token] = auths
 
 # Create the default users
-User('Alice', '123456', ['lavanderia', 'sala', 'banheiro'])
-User('Bob', 'qwert', ['cozinha', 'escritorio', 'quarto'])
+new_user('Alice', '123456', ['lavanderia', 'sala', 'banheiro'])
+new_user('Bob', 'qwert', ['cozinha', 'escritorio', 'quarto'])
 
 # Twin state
 current_temperatures = {"temperature-1": "void", "temperature-2": "void"}
@@ -61,35 +67,44 @@ def produce_led_command(state, ledname):
 
 
 class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
-    usersDB = {"Alice": "123456", "Bob": "qwert"}
-    accessToken = {
-        "Alice": "69ace8a2-96a6-11ed-a1eb-0242ac120002",
-        "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
-    }
-    authorizations = {
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-red", "temperature-1"],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-red", "led-green", "luminosity-1"]
-    }
+    # usersDB = {"Alice": "123456", "Bob": "qwert"}
+    # accessToken = {
+    #     "Alice": "69ace8a2-96a6-11ed-a1eb-0242ac120002",
+    #     "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
+    # }
+    # authorizations = {
+    #     # lavanderia, sala, cozinha, escritório, quarto, banheiro
+    #     "69ace8a2-96a6-11ed-a1eb-0242ac120002": ['lavanderia', 'sala', 'banheiro'],
+    #     "73a25f82-96aa-11ed-a1eb-0242ac120002": ['cozinha', 'escritorio', 'quarto']
+    # }
+
+    def AddNewUser(self, request, context):
+        regions = ['lavanderia', 'sala', 'banheiro', 'cozinha', 'escritorio', 'quarto']
+        login = request.login
+        password = request.password
+
+        new_user(login, password, shuffle(regions)[:3])
+        
+        return iot_service_pb2.AddNewUserReply(status="Ok")
 
     def GetAccessToken(self, request, context):
         login = request.login
         password = request.password
-        print(login, password)
         accessGranted = False
-        if login in self.usersDB:
-            if self.usersDB[login] == password:
+        if login in usersDB:
+            if usersDB[login] == password:
                 accessGranted = True
 
         if accessGranted:
-            token = self.accessToken[login]
+            token = accessTokenDB[login]
             return iot_service_pb2.Token(status="acesso concedido", token=token)
         else:
-            return iot_service_pb2.Token(status="acesso negado", token="")
+            return iot_service_pb2.Token(status="acesso negado")
     
     def GetRegions(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             list = iot_service_pb2.Regions(status="Ok")
-            for region in self.authorizations[request.accessToken]:
+            for region in authorizationsDB[request.accessToken]:
                 list.regions.append(iot_service_pb2.Region(
                     name=region,
                     icon="icone-"+region,
@@ -100,61 +115,63 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             return iot_service_pb2.Regions(status="Erro de identificação")
     
     def AddRegion(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             region = request.region.name
-            self.authorizations[request.accessToken].append(region)
+            authorizationsDB[request.accessToken].append(region)
+            return iot_service_pb2.AddRegionReply(status="Ok")
         else:
             return iot_service_pb2.AddRegionReply(status="Erro de identificação")
     
     def RemoveRegion(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             region = request.region.name
-            if region in self.authorizations[request.accessToken]:
-                self.authorizations(request.accessToken).remove(region)
+            if region in authorizationsDB[request.accessToken]:
+                authorizationsDB[request.accessToken].remove(region)
+                return iot_service_pb2.RemoveRegionReply(status="Ok")
         else:
             return iot_service_pb2.RemoveRegionReply(status="Erro de identificação")
     
     def GetLastRoute(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             pass
         else:
             return iot_service_pb2.RouteReply(status="Erro de identificação")
     
     def SetRoute(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             pass
         else:
             return iot_service_pb2.SetRouteReply(status="Erro de identificação")
 
     def SayTemperature(self, request, context):
-        if request.accessToken in self.authorizations:
-            if request.sensorName in self.authorizations[request.accessToken]:
+        if request.accessToken in authorizationsDB:
+            if request.sensorName in authorizationsDB[request.accessToken]:
                 return iot_service_pb2.TemperatureReply(status="Ok", temperature=current_temperatures[request.sensorName])
             else:
-                return iot_service_pb2.TemperatureReply(status="Erro de autorização", temperature="")
+                return iot_service_pb2.TemperatureReply(status="Erro de autorização")
         else:
-            return iot_service_pb2.TemperatureReply(status="Erro de identificação", temperature="")
+            return iot_service_pb2.TemperatureReply(status="Erro de identificação")
 
     def BlinkLed(self, request, context):
-        if request.accessToken in self.authorizations:
-            if request.sensorName in self.authorizations[request.accessToken]:
+        if request.accessToken in authorizationsDB:
+            if request.sensorName in authorizationsDB[request.accessToken]:
                 ledName = request.sensorName.split('-')[1]
                 produce_led_command(request.state, ledName)
                 led_state[request.sensorName] = request.state
                 return iot_service_pb2.LedReply(status="Ok", ledstate=led_state)
             else:
-                return iot_service_pb2.LedReply(status="Erro de autorização", ledstate={})
+                return iot_service_pb2.LedReply(status="Erro de autorização")
         else:
-            return iot_service_pb2.LedReply(status="Erro de identificação", ledstate={})
+            return iot_service_pb2.LedReply(status="Erro de identificação")
     
     def SayLuminosity(self, request, context):
-        if request.accessToken in self.authorizations:
-            if request.sensorName in self.authorizations[request.accessToken]:
+        if request.accessToken in authorizationsDB:
+            if request.sensorName in authorizationsDB[request.accessToken]:
                 return iot_service_pb2.LuminosityReply(status="Ok", luminosity=current_luminosities[request.sensorName])
             else:
-                return iot_service_pb2.LuminosityReply(status="Erro de autorização", luminosity="")
+                return iot_service_pb2.LuminosityReply(status="Erro de autorização")
         else:
-            return iot_service_pb2.LuminosityReply(status="Erro de identificação", luminosity="")
+            return iot_service_pb2.LuminosityReply(status="Erro de identificação")
 
 
 def serve():
