@@ -3,29 +3,13 @@ from concurrent import futures
 import logging
 import pickle
 import uuid
-from CloudCode.python.user import User
 from const import *
 from kafka import KafkaConsumer, KafkaProducer
 import grpc
 import iot_service_pb2
 import iot_service_pb2_grpc
 
-# A in-memory DB of authorizations
-authorizations = {}
 
-class User:
-    def __init__(self, login, password, auths):
-        self.login = login
-        self.password = password
-        self.token = self.build_token()
-        authorizations[self.token] = auths
-    
-    def build_token(self):
-        return str(uuid.uuid4())
-
-# Create the default users
-User('Alice', '123456', ['lavanderia', 'sala', 'banheiro'])
-User('Bob', 'qwert', ['cozinha', 'escritorio', 'quarto'])
 
 # Twin state
 current_temperatures = {"temperature-1": "void", "temperature-2": "void"}
@@ -61,15 +45,13 @@ def produce_led_command(state, ledname):
 
 
 class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
-    usersDB = {"Alice": "123456", "Bob": "qwert"}
-    accessToken = {
-        "Alice": "69ace8a2-96a6-11ed-a1eb-0242ac120002",
-        "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
-    }
-    authorizations = {
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-red", "temperature-1"],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-red", "led-green", "luminosity-1"]
-    }
+    usersDB = User.users
+    accessToken = User.access_tokens
+    authorizations = User.authorizations
+
+    def Register(self, request, context):
+        User.register(request)
+        User.set_authorizations()
 
     def GetAccessToken(self, request, context):
         login = request.login
