@@ -1,13 +1,25 @@
 import threading
 from concurrent import futures
 import logging
-import pickle
+import uuid
 
 from const import *
 from kafka import KafkaConsumer, KafkaProducer
 import grpc
 import iot_service_pb2
 import iot_service_pb2_grpc
+
+authorizations = {}
+
+class User:
+    def __init__(self, login, password, auths):
+        self.login = login
+        self.password = password
+        self.token = self.build_token()
+        authorizations[self.token] = auths
+    
+    def build_token(self):
+        return str(uuid.uuid4())
 
 # Twin state
 current_temperatures = {"temperature-1": "void", "temperature-2": "void"}
@@ -49,8 +61,9 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
         "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
     }
     authorizations = {
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-red", "temperature-1"],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-red", "led-green", "luminosity-1"]
+        # lavanderia, sala, cozinha, escritório, quarto, banheiro
+        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ['lavanderia', 'sala', 'banheiro'],
+        "73a25f82-96aa-11ed-a1eb-0242ac120002": ['cozinha', 'escritorio', 'quarto']
     }
 
     def GetAccessToken(self, request, context):
@@ -67,6 +80,46 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             return iot_service_pb2.Token(status="acesso concedido", token=token)
         else:
             return iot_service_pb2.Token(status="acesso negado", token="")
+    
+    def GetRegions(self, request, context):
+        if request.accessToken in self.authorizations:
+            list = iot_service_pb2.Regions(status="Ok")
+            for region in self.authorizations[request.accessToken]:
+                list.regions.append(iot_service_pb2.Region(
+                    name=region,
+                    icon="icone-"+region,
+                ))
+
+            return list
+        else:
+            return iot_service_pb2.Regions(status="Erro de identificação")
+    
+    def AddRegion(self, request, context):
+        if request.accessToken in self.authorizations:
+            region = request.region.name
+            self.authorizations[request.accessToken].append(region)
+        else:
+            return iot_service_pb2.AddRegionReply(status="Erro de identificação")
+    
+    def RemoveRegion(self, request, context):
+        if request.accessToken in self.authorizations:
+            region = request.region.name
+            if region in self.authorizations[request.accessToken]:
+                self.authorizations(request.accessToken).remove(region)
+        else:
+            return iot_service_pb2.RemoveRegionReply(status="Erro de identificação")
+    
+    def GetLastRoute(self, request, context):
+        if request.accessToken in self.authorizations:
+            pass
+        else:
+            return iot_service_pb2.RouteReply(status="Erro de identificação")
+    
+    def SetRoute(self, request, context):
+        if request.accessToken in self.authorizations:
+            pass
+        else:
+            return iot_service_pb2.SetRouteReply(status="Erro de identificação")
 
     def SayTemperature(self, request, context):
         if request.accessToken in self.authorizations:
