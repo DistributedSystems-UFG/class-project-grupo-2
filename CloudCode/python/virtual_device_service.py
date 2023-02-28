@@ -131,13 +131,13 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             return iot_service_pb2.SetRouteReply(status="Erro de identificação")
 
     def SayTemperature(self, request, context):
-        if request.accessToken in self.authorizations:
-            if request.sensorName in self.authorizations[request.accessToken]:
+        if request.accessToken in authorizationsDB:
+            if request.sensorName in authorizationsDB[request.accessToken]:
                 return iot_service_pb2.TemperatureReply(status="Ok", temperature=current_temperatures[request.sensorName])
             else:
-                return iot_service_pb2.TemperatureReply(status="Erro de autorização", temperature="")
+                return iot_service_pb2.TemperatureReply(status="Erro de autorização")
         else:
-            return iot_service_pb2.TemperatureReply(status="Erro de identificação", temperature="")
+            return iot_service_pb2.TemperatureReply(status="Erro de identificação")
 
     def BlinkLed(self, request, context):
         if request.accessToken in self.authorizations:
