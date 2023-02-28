@@ -1,8 +1,9 @@
 import threading
 from concurrent import futures
 import logging
+import pickle
 import uuid
-
+from CloudCode.python.user import User
 from const import *
 from kafka import KafkaConsumer, KafkaProducer
 import grpc
@@ -66,9 +67,8 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
         "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
     }
     authorizations = {
-        # lavanderia, sala, cozinha, escritório, quarto, banheiro
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ['lavanderia', 'sala', 'banheiro'],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ['cozinha', 'escritorio', 'quarto']
+        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-red", "temperature-1"],
+        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-red", "led-green", "luminosity-1"]
     }
 
     def GetAccessToken(self, request, context):

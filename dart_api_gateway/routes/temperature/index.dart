@@ -14,7 +14,7 @@ Future<Response> onRequest(RequestContext context) async {
     if (sensorName.isEmpty || accessToken.isEmpty) {
       return Response.json(
         statusCode: 400,
-        body: {'message': 'sensorName or accessToken was not received'},
+        body: "{'message': 'sensorName or accessToken was not received'}",
       );
     }
 
@@ -25,22 +25,21 @@ Future<Response> onRequest(RequestContext context) async {
         final temperatureReply = await TemperatureRepository.sayTemperature(
             temperatureRequest: temperatureRequest);
         return Response.json(
-          body: {
-            'temperature': temperatureReply.temperature,
-            'status': temperatureReply.status
-          },
+          body:
+              "{ 'temperature': ${temperatureReply.temperature}, 'status': ${temperatureReply.status} }",
         );
       // ignore: no_default_cases
       default:
         return Response.json(
           statusCode: 400,
-          body: {'message': 'wrong method'},
+          body: "{'message': 'wrong method'}",
         );
     }
   } catch (e) {
     return Response.json(
       statusCode: 400,
-      body: {'message': e.toString().replaceAll('\n', '').replaceAll('^', '')},
+      body:
+          "{'message': ${e.toString().replaceAll('\n', '').replaceAll('^', '')}}",
     );
   }
 }

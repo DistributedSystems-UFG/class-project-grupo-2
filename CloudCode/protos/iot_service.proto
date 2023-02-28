@@ -3,13 +3,6 @@ syntax = "proto3";
 service IoTService {
   rpc GetAccessToken (Credentials) returns (Token) {}
 
-  rpc GetRegions (GetRegionsRequest) returns (RegionsReply) {}
-  rpc AddRegion (AddRegionRequest) returns (AddRegionReply) {}
-  rpc RemoveRegion(RemoveRegionRequest) returns (RemoveRegionReply) {}
-
-  rpc GetLastRoute (GetLastRouteRequest) returns (RouteReply) {}
-  rpc SetRoute (SetRouteRequest) returns (SetRouteReply) {}
-
   rpc SayTemperature (TemperatureRequest) returns (TemperatureReply) {}
   rpc BlinkLed (LedRequest) returns (LedReply) {}
   rpc SayLuminosity (LuminosityRequest) returns (LuminosityReply) {}
@@ -23,58 +16,6 @@ message Credentials {
 message Token {
   string status = 1;
   string token = 2;
-}
-
-message GetRegionsRequest {
-  string accessToken = 1;
-}
-
-message Region {
-  string name = 1;
-  string icon = 2;
-}
-
-message RegionsReply {
-  string status = 1;
-  repeated Region regions = 2;
-}
-
-message AddRegionRequest {
-  Region region = 1;
-  string accessToken = 2;
-}
-
-message AddRegionReply {
-  string status = 1;
-}
-
-message RemoveRegionRequest {
-  Region region = 1;
-  string accessToken = 2;
-}
-
-message RemoveRegionReply {
-  string status = 1;
-}
-
-message GetLastRouteRequest {
-  string accessToken = 1;
-}
-
-message RouteReply {
-  string status = 1;
-  string route = 2;
-  string args = 3;
-}
-
-message SetRouteRequest {
-  string accessToken = 1;
-  string route = 2;
-  string args = 3;
-}
-
-message SetRouteReply {
-  string status = 1;
 }
 
 message TemperatureRequest {
