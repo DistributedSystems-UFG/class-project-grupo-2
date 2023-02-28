@@ -2,6 +2,7 @@ import threading
 from concurrent import futures
 import logging
 import pickle
+from CloudCode.python.user import User
 
 from const import *
 from kafka import KafkaConsumer, KafkaProducer
@@ -43,15 +44,12 @@ def produce_led_command(state, ledname):
 
 
 class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
-    usersDB = {"Alice": "123456", "Bob": "qwert"}
-    accessToken = {
-        "Alice": "69ace8a2-96a6-11ed-a1eb-0242ac120002",
-        "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
-    }
-    authorizations = {
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ["led-red", "temperature-1"],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ["led-red", "led-green", "luminosity-1"]
-    }
+    usersDB = User.users
+    accessToken = User.access_tokens
+    authorizations = User.authorizations
+
+    def Register(self, request, context):
+        User.register(request)
 
     def GetAccessToken(self, request, context):
         login = request.login
