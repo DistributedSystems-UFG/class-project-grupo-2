@@ -10,18 +10,22 @@ import iot_service_pb2
 import iot_service_pb2_grpc
 
 # A in-memory DB of user
-users = {}
+usersDB = {}
+
+# A in-memory DB of access tokens
+accessTokenDB = {}
 
 # A in-memory DB of authorizations
-authorizations = {}
+authorizationsDB = {}
 
 def new_token():
     return str(uuid.uuid4())
 
 def new_user(login, password, auths):
     token = new_token()
-    users[login] = password
-    authorizations[token] = auths
+    usersDB[login] = password
+    accessTokenDB[login] = token
+    authorizationsDB[token] = auths
 
 # Create the default users
 new_user('Alice', '123456', ['lavanderia', 'sala', 'banheiro'])
@@ -61,31 +65,30 @@ def produce_led_command(state, ledname):
 
 
 class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
-    usersDB = {"Alice": "123456", "Bob": "qwert"}
-    accessToken = {
-        "Alice": "69ace8a2-96a6-11ed-a1eb-0242ac120002",
-        "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
-    }
-    authorizations = {
-        # lavanderia, sala, cozinha, escritório, quarto, banheiro
-        "69ace8a2-96a6-11ed-a1eb-0242ac120002": ['lavanderia', 'sala', 'banheiro'],
-        "73a25f82-96aa-11ed-a1eb-0242ac120002": ['cozinha', 'escritorio', 'quarto']
-    }
+    # usersDB = {"Alice": "123456", "Bob": "qwert"}
+    # accessToken = {
+    #     "Alice": "69ace8a2-96a6-11ed-a1eb-0242ac120002",
+    #     "Bob": "73a25f82-96aa-11ed-a1eb-0242ac120002",
+    # }
+    # authorizations = {
+    #     # lavanderia, sala, cozinha, escritório, quarto, banheiro
+    #     "69ace8a2-96a6-11ed-a1eb-0242ac120002": ['lavanderia', 'sala', 'banheiro'],
+    #     "73a25f82-96aa-11ed-a1eb-0242ac120002": ['cozinha', 'escritorio', 'quarto']
+    # }
 
     def GetAccessToken(self, request, context):
         login = request.login
         password = request.password
-        print(login, password)
         accessGranted = False
-        if login in self.usersDB:
-            if self.usersDB[login] == password:
+        if login in usersDB:
+            if usersDB[login] == password:
                 accessGranted = True
 
         if accessGranted:
-            token = self.accessToken[login]
+            token = accessTokenDB[login]
             return iot_service_pb2.Token(status="acesso concedido", token=token)
         else:
-            return iot_service_pb2.Token(status="acesso negado", token="")
+            return iot_service_pb2.Token(status="acesso negado")
     
     def GetRegions(self, request, context):
         if request.accessToken in self.authorizations:
