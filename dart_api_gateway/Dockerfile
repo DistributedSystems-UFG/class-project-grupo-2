@@ -1,14 +1,8 @@
-# Official Dart image: https://hub.docker.com/_/dart
-# Specify the Dart SDK base image version using dart:<version> (ex: dart:2.17)
+# Specify the Dart SDK base image version using dart:<stable>
 FROM dart:stable AS build
 
-WORKDIR /app
-
-# Copy Dependencies
-
-# Install Dependencies
-
 # Resolve app dependencies.
+WORKDIR /app
 COPY pubspec.* ./
 RUN dart pub get
 
@@ -24,6 +18,6 @@ FROM scratch
 COPY --from=build /runtime/ /
 COPY --from=build /app/bin/server /app/bin/
 
-
 # Start server.
+EXPOSE 8080
 CMD ["/app/bin/server"]
