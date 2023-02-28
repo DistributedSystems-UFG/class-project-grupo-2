@@ -37,9 +37,9 @@ class User:
         count = 0
         for token in self.access_tokens:
             if(count%2==0):
-                self.authorizations[token] = ["led-red", "temperature-1"]
+                self.authorizations[token] = ['lavanderia', 'sala', 'banheiro']
             else:
-                self.authorizations[token] = ["led-red", "led-green", "luminosity-1"]
+                self.authorizations[token] = ['cozinha', 'escritorio', 'quarto']
             count+=1
             print(self.authorizations, count)
     
