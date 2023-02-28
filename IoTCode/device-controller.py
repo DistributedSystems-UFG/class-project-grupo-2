@@ -39,6 +39,7 @@ def read_temp():
 
 def consume_led_command():
     consumer = KafkaConsumer(bootstrap_servers=KAFKA_SERVER + ':' + KAFKA_PORT)
+    print(consumer)
     consumer.subscribe(topics=('ledcommand'))
     ledpin = 0
     for msg in consumer:
