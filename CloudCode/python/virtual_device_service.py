@@ -1,5 +1,6 @@
 import threading
 from concurrent import futures
+from random import shuffle
 import logging
 import uuid
 
@@ -76,6 +77,15 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
     #     "73a25f82-96aa-11ed-a1eb-0242ac120002": ['cozinha', 'escritorio', 'quarto']
     # }
 
+    def AddNewUser(self, request, context):
+        regions = ['lavanderia', 'sala', 'banheiro', 'cozinha', 'escritorio', 'quarto']
+        login = request.login
+        password = request.password
+
+        new_user(login, password, shuffle(regions)[:3])
+        
+        return iot_service_pb2.AddNewUserReply(status="Ok")
+
     def GetAccessToken(self, request, context):
         login = request.login
         password = request.password
@@ -107,6 +117,7 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
         if request.accessToken in authorizationsDB:
             region = request.region.name
             authorizationsDB[request.accessToken].append(region)
+            return iot_service_pb2.AddRegionReply(status="Ok")
         else:
             return iot_service_pb2.AddRegionReply(status="Erro de identificação")
     
@@ -114,7 +125,8 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
         if request.accessToken in authorizationsDB:
             region = request.region.name
             if region in authorizationsDB[request.accessToken]:
-                authorizationsDB(request.accessToken).remove(region)
+                authorizationsDB[request.accessToken].remove(region)
+                return iot_service_pb2.RemoveRegionReply(status="Ok")
         else:
             return iot_service_pb2.RemoveRegionReply(status="Erro de identificação")
     

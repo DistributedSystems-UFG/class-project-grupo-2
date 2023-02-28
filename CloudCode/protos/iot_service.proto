@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 service IoTService {
+  rpc AddNewUser (Credentials) returns (AddNewUserReply) {}
+
   rpc GetAccessToken (Credentials) returns (Token) {}
 
   rpc GetRegions (GetRegionsRequest) returns (RegionsReply) {}
@@ -18,6 +20,10 @@ service IoTService {
 message Credentials {
   string login = 1;
   string password = 2;
+}
+
+message AddNewUserReply {
+  string status = 1;
 }
 
 message Token {
