@@ -9,22 +9,23 @@ import grpc
 import iot_service_pb2
 import iot_service_pb2_grpc
 
+# A in-memory DB of user
+users = {}
+
 # A in-memory DB of authorizations
 authorizations = {}
 
-class User:
-    def __init__(self, login, password, auths):
-        self.login = login
-        self.password = password
-        self.token = self.build_token()
-        authorizations[self.token] = auths
-    
-    def build_token(self):
-        return str(uuid.uuid4())
+def new_token():
+    return str(uuid.uuid4())
+
+def new_user(login, password, auths):
+    token = new_token()
+    users[login] = password
+    authorizations[token] = auths
 
 # Create the default users
-User('Alice', '123456', ['lavanderia', 'sala', 'banheiro'])
-User('Bob', 'qwert', ['cozinha', 'escritorio', 'quarto'])
+new_user('Alice', '123456', ['lavanderia', 'sala', 'banheiro'])
+new_user('Bob', 'qwert', ['cozinha', 'escritorio', 'quarto'])
 
 # Twin state
 current_temperatures = {"temperature-1": "void", "temperature-2": "void"}
