@@ -62,5 +62,5 @@ trd.start()
 while True:
     (temp_c, temp_f) = read_temp()
     print(temp_c, temp_f)
-    producer.send('temperature', key='lavanderia'.encode(), value=str(temp_c).encode())
+    producer.send('temperature', key='diferente'.encode(), value=str(temp_c).encode())
     time.sleep(1)
