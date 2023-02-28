@@ -91,9 +91,9 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             return iot_service_pb2.Token(status="acesso negado")
     
     def GetRegions(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             list = iot_service_pb2.Regions(status="Ok")
-            for region in self.authorizations[request.accessToken]:
+            for region in authorizationsDB[request.accessToken]:
                 list.regions.append(iot_service_pb2.Region(
                     name=region,
                     icon="icone-"+region,
@@ -104,28 +104,28 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             return iot_service_pb2.Regions(status="Erro de identificação")
     
     def AddRegion(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             region = request.region.name
-            self.authorizations[request.accessToken].append(region)
+            authorizationsDB[request.accessToken].append(region)
         else:
             return iot_service_pb2.AddRegionReply(status="Erro de identificação")
     
     def RemoveRegion(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             region = request.region.name
-            if region in self.authorizations[request.accessToken]:
-                self.authorizations(request.accessToken).remove(region)
+            if region in authorizationsDB[request.accessToken]:
+                authorizationsDB(request.accessToken).remove(region)
         else:
             return iot_service_pb2.RemoveRegionReply(status="Erro de identificação")
     
     def GetLastRoute(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             pass
         else:
             return iot_service_pb2.RouteReply(status="Erro de identificação")
     
     def SetRoute(self, request, context):
-        if request.accessToken in self.authorizations:
+        if request.accessToken in authorizationsDB:
             pass
         else:
             return iot_service_pb2.SetRouteReply(status="Erro de identificação")
@@ -140,25 +140,25 @@ class IoTServer(iot_service_pb2_grpc.IoTServiceServicer):
             return iot_service_pb2.TemperatureReply(status="Erro de identificação")
 
     def BlinkLed(self, request, context):
-        if request.accessToken in self.authorizations:
-            if request.sensorName in self.authorizations[request.accessToken]:
+        if request.accessToken in authorizationsDB:
+            if request.sensorName in authorizationsDB[request.accessToken]:
                 ledName = request.sensorName.split('-')[1]
                 produce_led_command(request.state, ledName)
                 led_state[request.sensorName] = request.state
                 return iot_service_pb2.LedReply(status="Ok", ledstate=led_state)
             else:
-                return iot_service_pb2.LedReply(status="Erro de autorização", ledstate={})
+                return iot_service_pb2.LedReply(status="Erro de autorização")
         else:
-            return iot_service_pb2.LedReply(status="Erro de identificação", ledstate={})
+            return iot_service_pb2.LedReply(status="Erro de identificação")
     
     def SayLuminosity(self, request, context):
-        if request.accessToken in self.authorizations:
-            if request.sensorName in self.authorizations[request.accessToken]:
+        if request.accessToken in authorizationsDB:
+            if request.sensorName in authorizationsDB[request.accessToken]:
                 return iot_service_pb2.LuminosityReply(status="Ok", luminosity=current_luminosities[request.sensorName])
             else:
-                return iot_service_pb2.LuminosityReply(status="Erro de autorização", luminosity="")
+                return iot_service_pb2.LuminosityReply(status="Erro de autorização")
         else:
-            return iot_service_pb2.LuminosityReply(status="Erro de identificação", luminosity="")
+            return iot_service_pb2.LuminosityReply(status="Erro de identificação")
 
 
 def serve():

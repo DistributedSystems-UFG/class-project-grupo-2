@@ -5,7 +5,7 @@ service IoTService {
 
   rpc GetRegions (GetRegionsRequest) returns (RegionsReply) {}
   rpc AddRegion (AddRegionRequest) returns (AddRegionReply) {}
-  rpc RemoveRegion(RemoveRegionRequest) returns (RemoveRegionReply) {}
+  rpc RemoveRegion (RemoveRegionRequest) returns (RemoveRegionReply) {}
 
   rpc GetLastRoute (GetLastRouteRequest) returns (RouteReply) {}
   rpc SetRoute (SetRouteRequest) returns (SetRouteReply) {}
