@@ -2,8 +2,9 @@ import threading
 from concurrent import futures
 from random import shuffle
 import logging
+import pickle
 import uuid
-
+from CloudCode.python.user import User
 from const import *
 from kafka import KafkaConsumer, KafkaProducer
 import grpc
