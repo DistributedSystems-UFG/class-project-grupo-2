@@ -62,7 +62,5 @@ trd.start()
 while True:
     (temp_c, temp_f) = read_temp()
     print(temp_c, temp_f)
-    if (math.fabs(temp_c - last_reported) >= 0.1):
-        last_reported = temp_c
-        producer.send('temperature', key='lavanderia'.encode(), value=str(temp_c).encode())
+    producer.send('temperature', key='lavanderia'.encode(), value=str(temp_c).encode())
     time.sleep(1)
