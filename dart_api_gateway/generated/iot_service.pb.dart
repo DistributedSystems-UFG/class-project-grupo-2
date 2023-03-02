@@ -9,6 +9,633 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class GetRegionsRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRegionsRequest', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken', protoName: 'accessToken')
+    ..hasRequiredFields = false
+  ;
+
+  GetRegionsRequest._() : super();
+  factory GetRegionsRequest({
+    $core.String? accessToken,
+  }) {
+    final _result = create();
+    if (accessToken != null) {
+      _result.accessToken = accessToken;
+    }
+    return _result;
+  }
+  factory GetRegionsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRegionsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRegionsRequest clone() => GetRegionsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRegionsRequest copyWith(void Function(GetRegionsRequest) updates) => super.copyWith((message) => updates(message as GetRegionsRequest)) as GetRegionsRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRegionsRequest create() => GetRegionsRequest._();
+  GetRegionsRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRegionsRequest> createRepeated() => $pb.PbList<GetRegionsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRegionsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRegionsRequest>(create);
+  static GetRegionsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accessToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accessToken($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccessToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccessToken() => clearField(1);
+}
+
+class Region extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Region', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'icon')
+    ..hasRequiredFields = false
+  ;
+
+  Region._() : super();
+  factory Region({
+    $core.String? name,
+    $core.String? icon,
+  }) {
+    final _result = create();
+    if (name != null) {
+      _result.name = name;
+    }
+    if (icon != null) {
+      _result.icon = icon;
+    }
+    return _result;
+  }
+  factory Region.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Region.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Region clone() => Region()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Region copyWith(void Function(Region) updates) => super.copyWith((message) => updates(message as Region)) as Region; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Region create() => Region._();
+  Region createEmptyInstance() => create();
+  static $pb.PbList<Region> createRepeated() => $pb.PbList<Region>();
+  @$core.pragma('dart2js:noInline')
+  static Region getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Region>(create);
+  static Region? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get name => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set name($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get icon => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set icon($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasIcon() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearIcon() => clearField(2);
+}
+
+class RegionsReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RegionsReply', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..pc<Region>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'regions', $pb.PbFieldType.PM, subBuilder: Region.create)
+    ..hasRequiredFields = false
+  ;
+
+  RegionsReply._() : super();
+  factory RegionsReply({
+    $core.String? status,
+    $core.Iterable<Region>? regions,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    if (regions != null) {
+      _result.regions.addAll(regions);
+    }
+    return _result;
+  }
+  factory RegionsReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RegionsReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RegionsReply clone() => RegionsReply()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RegionsReply copyWith(void Function(RegionsReply) updates) => super.copyWith((message) => updates(message as RegionsReply)) as RegionsReply; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static RegionsReply create() => RegionsReply._();
+  RegionsReply createEmptyInstance() => create();
+  static $pb.PbList<RegionsReply> createRepeated() => $pb.PbList<RegionsReply>();
+  @$core.pragma('dart2js:noInline')
+  static RegionsReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RegionsReply>(create);
+  static RegionsReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<Region> get regions => $_getList(1);
+}
+
+class AddRegionRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddRegionRequest', createEmptyInstance: create)
+    ..aOM<Region>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'region', subBuilder: Region.create)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken', protoName: 'accessToken')
+    ..hasRequiredFields = false
+  ;
+
+  AddRegionRequest._() : super();
+  factory AddRegionRequest({
+    Region? region,
+    $core.String? accessToken,
+  }) {
+    final _result = create();
+    if (region != null) {
+      _result.region = region;
+    }
+    if (accessToken != null) {
+      _result.accessToken = accessToken;
+    }
+    return _result;
+  }
+  factory AddRegionRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddRegionRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AddRegionRequest clone() => AddRegionRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AddRegionRequest copyWith(void Function(AddRegionRequest) updates) => super.copyWith((message) => updates(message as AddRegionRequest)) as AddRegionRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AddRegionRequest create() => AddRegionRequest._();
+  AddRegionRequest createEmptyInstance() => create();
+  static $pb.PbList<AddRegionRequest> createRepeated() => $pb.PbList<AddRegionRequest>();
+  @$core.pragma('dart2js:noInline')
+  static AddRegionRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AddRegionRequest>(create);
+  static AddRegionRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Region get region => $_getN(0);
+  @$pb.TagNumber(1)
+  set region(Region v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRegion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRegion() => clearField(1);
+  @$pb.TagNumber(1)
+  Region ensureRegion() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get accessToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accessToken($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAccessToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccessToken() => clearField(2);
+}
+
+class AddRegionReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddRegionReply', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..hasRequiredFields = false
+  ;
+
+  AddRegionReply._() : super();
+  factory AddRegionReply({
+    $core.String? status,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory AddRegionReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddRegionReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AddRegionReply clone() => AddRegionReply()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AddRegionReply copyWith(void Function(AddRegionReply) updates) => super.copyWith((message) => updates(message as AddRegionReply)) as AddRegionReply; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AddRegionReply create() => AddRegionReply._();
+  AddRegionReply createEmptyInstance() => create();
+  static $pb.PbList<AddRegionReply> createRepeated() => $pb.PbList<AddRegionReply>();
+  @$core.pragma('dart2js:noInline')
+  static AddRegionReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AddRegionReply>(create);
+  static AddRegionReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
+class RemoveRegionRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RemoveRegionRequest', createEmptyInstance: create)
+    ..aOM<Region>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'region', subBuilder: Region.create)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken', protoName: 'accessToken')
+    ..hasRequiredFields = false
+  ;
+
+  RemoveRegionRequest._() : super();
+  factory RemoveRegionRequest({
+    Region? region,
+    $core.String? accessToken,
+  }) {
+    final _result = create();
+    if (region != null) {
+      _result.region = region;
+    }
+    if (accessToken != null) {
+      _result.accessToken = accessToken;
+    }
+    return _result;
+  }
+  factory RemoveRegionRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RemoveRegionRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RemoveRegionRequest clone() => RemoveRegionRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RemoveRegionRequest copyWith(void Function(RemoveRegionRequest) updates) => super.copyWith((message) => updates(message as RemoveRegionRequest)) as RemoveRegionRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static RemoveRegionRequest create() => RemoveRegionRequest._();
+  RemoveRegionRequest createEmptyInstance() => create();
+  static $pb.PbList<RemoveRegionRequest> createRepeated() => $pb.PbList<RemoveRegionRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RemoveRegionRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RemoveRegionRequest>(create);
+  static RemoveRegionRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Region get region => $_getN(0);
+  @$pb.TagNumber(1)
+  set region(Region v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRegion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRegion() => clearField(1);
+  @$pb.TagNumber(1)
+  Region ensureRegion() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get accessToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accessToken($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAccessToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccessToken() => clearField(2);
+}
+
+class RemoveRegionReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RemoveRegionReply', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..hasRequiredFields = false
+  ;
+
+  RemoveRegionReply._() : super();
+  factory RemoveRegionReply({
+    $core.String? status,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory RemoveRegionReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RemoveRegionReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RemoveRegionReply clone() => RemoveRegionReply()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RemoveRegionReply copyWith(void Function(RemoveRegionReply) updates) => super.copyWith((message) => updates(message as RemoveRegionReply)) as RemoveRegionReply; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static RemoveRegionReply create() => RemoveRegionReply._();
+  RemoveRegionReply createEmptyInstance() => create();
+  static $pb.PbList<RemoveRegionReply> createRepeated() => $pb.PbList<RemoveRegionReply>();
+  @$core.pragma('dart2js:noInline')
+  static RemoveRegionReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RemoveRegionReply>(create);
+  static RemoveRegionReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
+class GetLastRouteRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetLastRouteRequest', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken', protoName: 'accessToken')
+    ..hasRequiredFields = false
+  ;
+
+  GetLastRouteRequest._() : super();
+  factory GetLastRouteRequest({
+    $core.String? accessToken,
+  }) {
+    final _result = create();
+    if (accessToken != null) {
+      _result.accessToken = accessToken;
+    }
+    return _result;
+  }
+  factory GetLastRouteRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetLastRouteRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetLastRouteRequest clone() => GetLastRouteRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetLastRouteRequest copyWith(void Function(GetLastRouteRequest) updates) => super.copyWith((message) => updates(message as GetLastRouteRequest)) as GetLastRouteRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetLastRouteRequest create() => GetLastRouteRequest._();
+  GetLastRouteRequest createEmptyInstance() => create();
+  static $pb.PbList<GetLastRouteRequest> createRepeated() => $pb.PbList<GetLastRouteRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetLastRouteRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetLastRouteRequest>(create);
+  static GetLastRouteRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accessToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accessToken($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccessToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccessToken() => clearField(1);
+}
+
+class RouteReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RouteReply', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'route')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'args')
+    ..hasRequiredFields = false
+  ;
+
+  RouteReply._() : super();
+  factory RouteReply({
+    $core.String? status,
+    $core.String? route,
+    $core.String? args,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    if (route != null) {
+      _result.route = route;
+    }
+    if (args != null) {
+      _result.args = args;
+    }
+    return _result;
+  }
+  factory RouteReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RouteReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RouteReply clone() => RouteReply()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RouteReply copyWith(void Function(RouteReply) updates) => super.copyWith((message) => updates(message as RouteReply)) as RouteReply; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static RouteReply create() => RouteReply._();
+  RouteReply createEmptyInstance() => create();
+  static $pb.PbList<RouteReply> createRepeated() => $pb.PbList<RouteReply>();
+  @$core.pragma('dart2js:noInline')
+  static RouteReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RouteReply>(create);
+  static RouteReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get route => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set route($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasRoute() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRoute() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get args => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set args($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasArgs() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearArgs() => clearField(3);
+}
+
+class SetRouteRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SetRouteRequest', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accessToken', protoName: 'accessToken')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'route')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'args')
+    ..hasRequiredFields = false
+  ;
+
+  SetRouteRequest._() : super();
+  factory SetRouteRequest({
+    $core.String? accessToken,
+    $core.String? route,
+    $core.String? args,
+  }) {
+    final _result = create();
+    if (accessToken != null) {
+      _result.accessToken = accessToken;
+    }
+    if (route != null) {
+      _result.route = route;
+    }
+    if (args != null) {
+      _result.args = args;
+    }
+    return _result;
+  }
+  factory SetRouteRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SetRouteRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  SetRouteRequest clone() => SetRouteRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  SetRouteRequest copyWith(void Function(SetRouteRequest) updates) => super.copyWith((message) => updates(message as SetRouteRequest)) as SetRouteRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static SetRouteRequest create() => SetRouteRequest._();
+  SetRouteRequest createEmptyInstance() => create();
+  static $pb.PbList<SetRouteRequest> createRepeated() => $pb.PbList<SetRouteRequest>();
+  @$core.pragma('dart2js:noInline')
+  static SetRouteRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetRouteRequest>(create);
+  static SetRouteRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accessToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accessToken($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccessToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccessToken() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get route => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set route($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasRoute() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRoute() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get args => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set args($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasArgs() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearArgs() => clearField(3);
+}
+
+class SetRouteReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SetRouteReply', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..hasRequiredFields = false
+  ;
+
+  SetRouteReply._() : super();
+  factory SetRouteReply({
+    $core.String? status,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory SetRouteReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SetRouteReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  SetRouteReply clone() => SetRouteReply()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  SetRouteReply copyWith(void Function(SetRouteReply) updates) => super.copyWith((message) => updates(message as SetRouteReply)) as SetRouteReply; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static SetRouteReply create() => SetRouteReply._();
+  SetRouteReply createEmptyInstance() => create();
+  static $pb.PbList<SetRouteReply> createRepeated() => $pb.PbList<SetRouteReply>();
+  @$core.pragma('dart2js:noInline')
+  static SetRouteReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetRouteReply>(create);
+  static SetRouteReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
 class Credentials extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Credentials', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'login')
@@ -68,6 +695,53 @@ class Credentials extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(1);
   @$pb.TagNumber(2)
   void clearPassword() => clearField(2);
+}
+
+class AddNewUserReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AddNewUserReply', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..hasRequiredFields = false
+  ;
+
+  AddNewUserReply._() : super();
+  factory AddNewUserReply({
+    $core.String? status,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory AddNewUserReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddNewUserReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AddNewUserReply clone() => AddNewUserReply()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AddNewUserReply copyWith(void Function(AddNewUserReply) updates) => super.copyWith((message) => updates(message as AddNewUserReply)) as AddNewUserReply; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AddNewUserReply create() => AddNewUserReply._();
+  AddNewUserReply createEmptyInstance() => create();
+  static $pb.PbList<AddNewUserReply> createRepeated() => $pb.PbList<AddNewUserReply>();
+  @$core.pragma('dart2js:noInline')
+  static AddNewUserReply getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AddNewUserReply>(create);
+  static AddNewUserReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
 }
 
 class Token extends $pb.GeneratedMessage {

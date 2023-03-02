@@ -11,4 +11,14 @@ class AuthRepository {
 
     return token;
   }
+
+  static Future<AddNewUserReply> addNewUser({
+    required Credentials credentials,
+  }) async {
+    final stub = IoTServiceClient(GRPCService.instance.channel);
+
+    final AddNewUserReply addNewUserReply = await stub.addNewUser(credentials);
+
+    return addNewUserReply;
+  }
 }

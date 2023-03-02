@@ -11,7 +11,7 @@ class GRPCService {
 
   ClientChannel _openChannel() {
     final channel = ClientChannel(
-      '35.247.238.84',
+      '34.170.205.17',
       port: 50051,
       options: const ChannelOptions(
         credentials: ChannelCredentials.insecure(),

@@ -16,30 +16,36 @@ Future<Response> onRequest(RequestContext context) async {
     if (login.isEmpty || password.isEmpty) {
       return Response.json(
         statusCode: 400,
-        body: "{'message': 'login or password was not received'}",
+        body: {'message': 'login or password was not received'},
       );
     }
 
     switch (context.request.method) {
       case HttpMethod.post:
         final credentials = Credentials(login: login, password: password);
+        final addNewUserReply =
+            AuthRepository.addNewUser(credentials: credentials);
+        return Response.json(
+          statusCode: 200,
+        );
+      case HttpMethod.get:
+        final credentials = Credentials(login: login, password: password);
         final token =
             await AuthRepository.getAccessToken(credentials: credentials);
         return Response.json(
-          body: "{ 'token': ${token.token}, 'status': ${token.status} }",
+          body: {'token': token.token, 'status': token.status},
         );
       // ignore: no_default_cases
       default:
         return Response.json(
           statusCode: 400,
-          body: "{'message': 'wrong method'}",
+          body: {'message': 'wrong method'},
         );
     }
   } catch (e) {
     return Response.json(
       statusCode: 400,
-      body:
-          "{'message': ${e.toString().replaceAll('\n', '').replaceAll('^', '')}}",
+      body: {'message': e.toString().replaceAll('\n', '').replaceAll('^', '')},
     );
   }
 }

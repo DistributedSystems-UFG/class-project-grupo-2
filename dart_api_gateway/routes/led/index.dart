@@ -15,8 +15,9 @@ Future<Response> onRequest(RequestContext context) async {
     if (sensorName.isEmpty || accessToken.isEmpty || state == null) {
       return Response.json(
         statusCode: 400,
-        body:
-            "{'message': 'sensorName or accessToken or state was not received'}",
+        body: {
+          'message': 'sensorName or accessToken or state was not received'
+        },
       );
     }
 
@@ -26,21 +27,22 @@ Future<Response> onRequest(RequestContext context) async {
             state: state, sensorName: sensorName, accessToken: accessToken);
         final ledReply = await LedRepository.blinkLed(ledRequest: ledRequest);
         return Response.json(
-          body:
-              "{ 'ledstate': ${ledReply.ledstate.entries}, 'status': ${ledReply.status} }",
+          body: {
+            'ledstate': ledReply.ledstate,
+            'status': ledReply.status,
+          },
         );
       // ignore: no_default_cases
       default:
         return Response.json(
           statusCode: 400,
-          body: "{'message': 'wrong method'}",
+          body: {'message': 'wrong method'},
         );
     }
   } catch (e) {
     return Response.json(
       statusCode: 400,
-      body:
-          "{'message': ${e.toString().replaceAll('\n', '').replaceAll('^', '')}}",
+      body: {'message': e.toString().replaceAll('\n', '').replaceAll('^', '')},
     );
   }
 }
